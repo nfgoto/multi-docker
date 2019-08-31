@@ -12,12 +12,13 @@ script:
 
 # build prod images of all services
 after_success:
+  - docker info
   - docker build -t fgoto/client-multi ./client
   - docker build -t fgoto/api-multi ./server  
   - docker build -t fgoto/worker-multi ./worker
   - docker build -t fgoto/nginx-multi ./nginx
   # log in to docker CLI
-  - docker login -u "$DOCKER_ID" --password "$DOCKER_PASSWORD"
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # push all images to Dockerhub
   - docker push fgoto/client-multi
   - docker push fgoto/api-multi
