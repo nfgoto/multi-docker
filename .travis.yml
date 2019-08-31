@@ -17,7 +17,7 @@ after_success:
   - docker build -t fgoto/worker-multi ./worker
   - docker build -t fgoto/nginx-multi ./nginx
   # log in to docker CLI
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin hub.docker.com
+  - docker login -u "$DOCKER_ID" --password "$DOCKER_PASSWORD"
   # push all images to Dockerhub
   - docker push fgoto/client-multi
   - docker push fgoto/api-multi
