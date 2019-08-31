@@ -4,8 +4,6 @@ services:
 
 # build test version
 before_install:
-  # log in to docker CLI
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   - docker build -t fgoto/react-test -f ./client/Dockerfile.dev ./client
 
 # run tests
@@ -18,6 +16,8 @@ after_success:
   - docker build -t fgoto/api-multi ./server  
   - docker build -t fgoto/worker-multi ./worker
   - docker build -t fgoto/nginx-multi ./nginx
+  # log in to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin hub.docker.com
   # push all images to Dockerhub
   - docker push fgoto/client-multi
   - docker push fgoto/api-multi
