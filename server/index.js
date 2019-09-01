@@ -73,7 +73,6 @@ app.post("/values", async (req, res) => {
     res.status(422).send("Index too high");
   }
 
-  //  @@@@@@@@@@@@@@@@@@@@@ TODO FIX REDIS TO SHOW VALUES CALCULATED
   redisClient.hset("values", index, "nothing yet");
   //   wake up the worker to calculate fib
   redisPublisher.publish("insert", index);
