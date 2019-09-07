@@ -1,41 +1,51 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from "axios";
 
 class Fib extends Component {
   state = {
     seenIndexes: [],
     values: {},
-    index: ''
+    index: ""
   };
 
   componentDidMount() {
-    this.fetchIndexes();
-    this.fetchValues();
+    try {
+      this.fetchIndexes();
+      this.fetchValues();
+    } catch (e) {}
   }
 
   async fetchValues() {
-    const values = await axios.get('/api/values/current');    
+    const values = await axios.get("/api/values/current");
     this.setState({ values: values.data });
   }
 
   async fetchIndexes() {
-    const seenIndexes = await axios.get('/api/values/all');
-    this.setState({
-      seenIndexes: seenIndexes.data
-    });
+    try {
+      const seenIndexes = await axios.get("/api/values/all");
+      this.setState({
+        seenIndexes: seenIndexes.data || []
+      });
+    } catch (error) {
+      this.setState({
+        seenIndexes: []
+      });
+    }
   }
 
   handleSubmit = async event => {
     event.preventDefault();
 
-    await axios.post('/api/values', {
-      index: this.state.index
-    });
-    this.setState({ index: '' });
+    try {
+      await axios.post("/api/values", {
+        index: this.state.index
+      });
+      this.setState({ index: "" });
+    } catch (error) {}
   };
 
   renderSeenIndexes() {
-    return this.state.seenIndexes.map(({ number }) => number).join(', ');
+    return Array.isArray(this.state.seenIndexes) && this.state.seenIndexes.map(({ number }) => number).join(", ");
   }
 
   renderValues() {
